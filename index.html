@@ -33,7 +33,7 @@
       </div>
 
       <h3>Result</h3>
-      <span id="result" style="weight:bold">haha</span>
+      <input type="text" id="result" disabled="disabled" name="result" value="">
     </div>
     <script type="text/javascript">
       function calculate() {
@@ -49,26 +49,54 @@
           }
         }
         var text=textObject.value.toLowerCase();
+        var posF=0;
+        var posE=text.length;
+        for(var i=text.length-1;i>=0;i--){
+          if(text.charAt(i)==' '){
+            posE--;
+          }
+          else{
+            break;
+          }
+        }
+        for(var i=0;i<text.length;i++){
+          if(text.charAt(i)==' '){
+            posF++;
+          }
+          else{
+            break;
+          }
+        }
+        text=text.substring(posF,posE);
         var key=keyObject.value.toLowerCase();
         //replace space
         key=key.replace(/\s+/g,"");
         var pos=0;
-        var result=[];
+        var result=new Array();
         for(var i=0;i<text.length;i++){
           if(text[i]==' '){
             result.push(' ');
             continue;
           }
-          tmp=((text.charCodeAt(i)-"a".charCodeAt(0))+(key.charCodeAt(pos)-"a".charCodeAt(0)))%26+"a".charCodeAt(0);
-          tmp=String.fromCharCode(tmp);
-          result.push(tmp);
-          pos=(pos+1)%key.length;
+          if(direction==0){
+            tmp=((text.charCodeAt(i)-"a".charCodeAt(0))+(key.charCodeAt(pos)-"a".charCodeAt(0)))%26+"a".charCodeAt(0);
+            tmp=String.fromCharCode(tmp);
+            result.push(tmp);
+            pos=(pos+1)%key.length;
+          }
+          else{
+            tmp=(text.charCodeAt(i)-key.charCodeAt(pos));
+            if(tmp<0){
+              tmp=tmp+26;
+            }
+            tmp=tmp+"a".charCodeAt(0);
+            tmp=String.fromCharCode(tmp);
+            result.push(tmp);
+            pos=(pos+1)%key.length;
+          }
         }
-        //result=result.toString();
-        console.log(text);
-        console.log(text.length);
-        console.log(key);
-        console.log(result);
+        result=result.join("");
+        resultObject.value=result;
 
       }
     </script>
